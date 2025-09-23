@@ -1,0 +1,104 @@
+<div class="p-4 md:p-8 bg-gray-50 min-h-screen font-sans">
+<div class="max-w-4xl mx-auto space-y-12">
+<div class="border-b border-gray-900/10 pb-8">
+<h2 class="text-3xl font-bold tracking-tight text-gray-900">{{ title }}</h2>
+<p class="mt-2 text-base leading-6 text-gray-600">This is a simple task management app to demonstrate data binding.</p>
+</div>
+
+<div class="border-b border-gray-900/10 pb-12">
+  <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+    <div class="sm:col-span-3">
+      <label for="task-name" class="block text-sm font-medium leading-6 text-gray-900">Task</label>
+      <div class="mt-2">
+        <input
+          id="task-name"
+          type="text"
+          name="task-name"
+          [(ngModel)]="text_field"
+          (keyup.enter)="addTask()"
+          class="block w-full rounded-lg border-2 border-gray-300 px-4 py-3 text-base text-gray-900 placeholder-gray-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+          placeholder="Enter a new task..."
+        />
+      </div>
+
+      <div class="mt-2 h-6">
+        <p class="text-sm text-red-600">{{ messageError() }}</p>
+      </div>
+
+      <div class="mt-6 flex items-center justify-end gap-x-4">
+        <!-- Botón de Cancelar -->
+        <button
+          *ngIf="editingTask()"
+          type="button"
+          (click)="cancelEdit()"
+          class="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600 transition"
+        >
+          Cancel
+        </button>
+        <button
+          *ngIf="!editingTask()"
+          type="button"
+          (click)="text_field.set('')"
+          class="text-sm font-semibold leading-6 text-gray-900 hover:text-indigo-600 transition"
+        >
+          Clear
+        </button>
+        <!-- Botón de Guardar -->
+        <button
+          type="button"
+          (click)="addTask()"
+          class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          {{ editingTask() ? 'Save Changes' : 'Save' }}
+        </button>
+      </div>
+    </div>
+    <div class="sm:col-span-3">
+      <h3 class="block text-sm font-medium leading-6 text-gray-900">All my tasks</h3>
+      <div class="mt-5">
+        <p *ngIf="tasks().length === 0" class="text-sm text-gray-500 italic">
+          No tasks yet.
+        </p>
+
+        <ul *ngIf="tasks().length > 0" class="space-y-3">
+          <li
+            *ngFor="let task of tasks()"
+            class="px-4 py-2 rounded-lg shadow-sm flex justify-between items-center bg-white border border-gray-200 hover:bg-gray-100 transition duration-150 ease-in-out"
+          >
+            <span class="text-gray-800 break-words">{{ task.name }}</span>
+            <div class="flex items-center gap-x-2">
+              <!-- Botón de Editar -->
+              <button
+                type="button"
+                (click)="startEditTask(task)"
+                class="p-2 rounded-full text-gray-400 hover:text-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                aria-label="Edit task"
+                title="Edit task"
+              >
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+              </button>
+              <!-- Botón de Borrar -->
+              <button
+                type="button"
+                (click)="deleteTask(task.id)"
+                class="p-2 rounded-full text-gray-400 hover:text-red-600 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition"
+                aria-label="Delete task"
+                title="Delete task"
+              >
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.166L19.5 19.5A2.25 2.25 0 0 1 17.25 21H6.75A2.25 2.25 0 0 1 4.5 19.5L3.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .563c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916A1.125 1.125 0 0 0 12.943 3h-1.886a1.125 1.125 0 0 0-1.116.99v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+              </button>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
