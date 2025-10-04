@@ -1,0 +1,126 @@
+  <!-- Maquetado de funciones CRUD en localStorage-->
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-2xl shadow-md">
+  <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+    Gestión de Cursos - EduUTVT
+  </h2>
+
+  <!-- Formulario -->
+  <form
+    (ngSubmit)="editando() ? actualizarAlumno() : agregarAlumno()"
+    #form="ngForm"
+    class="space-y-4"
+  >
+    <div>
+      <label for="name" class="block text-sm font-medium text-gray-700">Nombre del curso</label>
+      <input
+        id="name"
+        type="text"
+        placeholder="Ej. PWA"
+        [(ngModel)]="nuevoAlumno().name"
+        name="name"
+        required
+        class="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+      />
+    </div>
+
+    <div>
+      <label for="duration" class="block text-sm font-medium text-gray-700">Duración</label>
+      <input
+        id="duration"
+        type="text"
+        placeholder="Ej. 40 hrs (Solo valores numericos)"
+        [(ngModel)]="nuevoAlumno().duration"
+        name="duration"
+        required
+        class="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+      />
+    </div>
+
+    <div>
+      <label for="nivel" class="block text-sm font-medium text-gray-700">Nivel</label>
+      <select
+        id="nivel"
+        [(ngModel)]="nuevoAlumno().nivel"
+        name="nivel"
+        required
+        class="mt-1 block w-full rounded-lg border border-gray-300 p-2 bg-white focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+      >
+        <option value="" disabled [selected]="!nuevoAlumno().nivel">Selecciona tu Nivel </option>
+        <option value="basico">Básico</option>
+        <option value="intermedio">Intermedio</option>
+        <option value="avanzado">Avanzado</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="cuatrimestre" class="block text-sm font-medium text-gray-700">Cuatrimestre</label>
+      <input
+        id="cuatrimestre"
+        type="number"
+        min="1"
+        placeholder="Ej. 2"
+        [(ngModel)]="nuevoAlumno().cuatrimestre"
+        name="cuatrimestre"
+        required
+        class="mt-1 block w-full rounded-lg border border-gray-300 p-2 focus:border-blue-500 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+      />
+    </div>
+
+    <div class="flex gap-3">
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="flex-1 py-2 px-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+      >
+        {{ editando() ? 'Actualizar Curso' : 'Agregar Curso' }}
+      </button>
+
+      @if (editando()) {
+        <button
+          type="button"
+          (click)="resetForm()"
+          class="py-2 px-4 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600 transition"
+        >
+          Cancelar
+        </button>
+      }
+    </div>
+  </form>
+
+  <hr class="my-6" />
+
+  <!-- Lista de cursos de alumnos-->
+  @if (alumnos().length > 0) {
+    <div>
+      <h3 class="text-xl font-semibold text-gray-800 mb-4">Cursos Registrados</h3>
+      <ul class="space-y-3">
+        @for (alumno of alumnos(); track alumno.id) {
+          <li class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm">
+            <div>
+              <p class="font-bold text-gray-900">{{ alumno.name }}</p>
+              <p class="text-sm text-gray-600">Duración: {{ alumno.duration }}</p>
+              <p class="text-sm text-gray-600">Nivel: {{ alumno.nivel | titlecase }}</p>
+              <p class="text-sm text-gray-600">Cuatrimestre: {{ alumno.cuatrimestre }}</p>
+            </div>
+            <div class="flex gap-2">
+              <button
+                (click)="editarAlumno(alumno)"
+                class="px-3 py-1 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 transition"
+              >
+                Editar
+              </button>
+              <button
+                (click)="eliminarAlumno(alumno.id)"
+                class="px-3 py-1 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+              >
+                Eliminar
+              </button>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
+  } @else {
+    <p class="text-center text-gray-500 mt-6">No hay cursos registrados.</p>
+  }
+</div>
